@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [lengthOfDayDelta, setLengthOfDayDelta] = useState(null)
+  useEffect(() => {
+    const timer = setInterval(() => {
+
+    }, 100)
+    return () => clearInterval(timer)
+  })
   return (
     <div className="App">
       <header className="App-header">
