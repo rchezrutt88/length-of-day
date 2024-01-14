@@ -1,33 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import logo from './logo.svg'
+import './App.css'
+import { useTimeToSolstice } from './useTimeToSolstice'
+import { useLengthOfDay } from './useLengthOfDay'
 
-function App() {
-  const [lengthOfDayDelta, setLengthOfDayDelta] = useState(null)
-  useEffect(() => {
-    const timer = setInterval(() => {
+function App () {
+  const milliSecondsToSummerSolstice = useTimeToSolstice()
+  const millisecondsFromWinterSolstice = (31556952000 / 2) -
+    milliSecondsToSummerSolstice
+  const percentageToSolstice = millisecondsFromWinterSolstice /
+    (31556952000 / 2)
 
-    }, 100)
-    return () => clearInterval(timer)
-  })
+  const lengthOfDays = useLengthOfDay()
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+        <p style={{fontFamily: 'monospace'}}>
+          {percentageToSolstice.toPrecision(10)}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p>
+          Today is {lengthOfDays.diffFromYesterday} longer than yesterday
+        </p>
+        <p>
+          Tomorrow will be {lengthOfDays.diffFromTomorrow} longer than today
+        </p>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

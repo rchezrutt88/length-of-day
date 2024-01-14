@@ -2,6 +2,7 @@ import React from 'react';
 import * as SunCalc from 'suncalc'
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import * as dateFns from 'date-fns'
 
 test('renders learn react link', () => {
   render(<App />);
@@ -12,7 +13,19 @@ test('renders learn react link', () => {
 test('length of day difference', () =>  {
   const lat = 42.3601
   const lng = -71.057083
-  const date = new Date()
-  const lengthOfYesterday = SunCalc.getTimes(date.setDate(date.getDate() - 1), lat, lng)
-expect(SunCalc.getTimes(new Date(), 51.5, -0.1)).toEqual(1)
+  const lengthOfToday = (() => {
+    const {sunrise, sunset} = SunCalc.getTimes(new Date(), lat, lng)
+    return sunset.getTime() - sunrise.getTime()
+  })()
+  const lengthOfYesterday = (() => {
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    const {sunrise, sunset} = SunCalc.getTimes(yesterday, lat, lng)
+    return sunset.getTime() - sunrise.getTime()
+  })()
+  const diff = Math.abs(lengthOfToday - lengthOfYesterday)
+  const time = (() => {
+    const dayWithOffset = dateFns.setMilliseconds(dateFns.startOfDay(new Date()), diff)
+    return dateFns.formatISO9075(dayWithOffset, {representation: 'time'})
+  })()
+  expect(time).toEqual('')
 })

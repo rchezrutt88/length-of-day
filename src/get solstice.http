@@ -1,0 +1,2 @@
+GET https://aa.usno.navy.mil/api/seasons?year=2024
+Accept: application/json
